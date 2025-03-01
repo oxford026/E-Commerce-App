@@ -1,5 +1,6 @@
 const fs = require('fs');
 const crypto = require('crypto');
+const e = require('express');
 
 class usersRepository {
     constructor(filename) {
@@ -35,13 +36,34 @@ class usersRepository {
     randomId() {
         return  crypto.randomBytes(4).toString('hex');
     }
+    async getOne(id) {
+        const records = await this.getAll();
+        return records.find(record => record.id === id);
+    }
+    async delete(id) {
+        const records = await this.getAll();
+        const filteredRecords = records.filter(record => record.id !== id);
+        await this.writeAll(filteredRecords);
+    }
+    async update(id, attrs) {
+        const records = await this.getAll();
+        const record = records.find(record => record.id === id);
+        if (!record) {
+            throw new Error(`Record with id ${id} not found`);
+        }
+        Object.assign(record, attrs);
+        await this.writeAll(records);
+    }
+
 }
 
 const test = async () => {
+
     const repo = new usersRepository('users.json');
-    await repo.create({ email: 'test@test.com', password: 'password' });
-    const users = await repo.getAll();
-    console.log(users);
+    // await repo.create({ email: 'mahmoudjalloh63@gmail.com'});
+    update = await repo.update("be84550c",{password: "66fddfdfd"});
+    await repo.delete("be84550c");
+
 };
 test();
 
