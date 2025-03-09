@@ -30,8 +30,13 @@ app.post('/', async (req, res) => {
     if (password !== passwordConfirmation) {
         return res.send('Passwords must match');
     }
+
+    await usersRepo.create({ email, password });
+
+
     res.send('Account created!!!');
 });
+
 
 app.listen(3000, () => {
     console.log('Running');
