@@ -26,7 +26,7 @@ class usersRepository {
     }
 
     async create(attrs) {
-        // attrs === { email: '', password: '' }
+
         attrs.id = this.randomId();
         const salt = crypto.randomBytes(8).toString('hex');
         const buf = await scrypt(attrs.password, salt, 64);
@@ -42,6 +42,13 @@ class usersRepository {
 
         return record;
     }
+
+    async comparePasswords(saved, supplied){
+        const result = saved.split('.');
+        const hashed = result[0];
+        const salt = result[1];
+    }
+
     async writeAll(records) {
         await fs.promises
             .writeFile(this.filename, JSON.stringify(records, null, 2));
