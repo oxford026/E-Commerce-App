@@ -4,6 +4,7 @@ module.exports = ({ products }) => {
     const renderedProducts = products.map(product => {
         return `
             <div>${product.title}</div>
+            
     `;
     }).join('');
 

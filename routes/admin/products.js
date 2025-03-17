@@ -12,7 +12,7 @@ const { requireTitle, requirePrice } = require('./validators');
 
 
 
-router.get('/admin/product', async (req, res) => {
+router.get('/admin/products', async (req, res) => {
 
     const products = await productsRepo.getAll();
     res.send(productsIndexTemplate({ products }));
@@ -38,7 +38,7 @@ router.post('/admin/products/new',
     const { title, price } = req.body;
     await productsRepo.create({ title, price, image });
 
-    res.send('submitted');
+    res.redirect('/admin/products');
 });
 
 module.exports = router;
