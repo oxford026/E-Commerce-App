@@ -55,7 +55,7 @@ module.exports = class Repository {
     await this.writeAll(filteredRecords);
   }
 
-  async update(id, attrs) {
+  async update(id, attrs,) {
     const records = await this.getAll();
     const record = records.find(record => record.id === id);
 
