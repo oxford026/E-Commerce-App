@@ -13,8 +13,27 @@ router.post('/cart/products', async (req, res) => {
     else {
         cart = await cartsRepo.getOne(req.session.cartId);
     }
-    console.log(cart);
+    
+    const existingItem = cart.items.find(item => item.id === req.body.productId);
+    if (existingItem) {
+        existingItem.quantity++;
+    }
+    else {
+        cart.items.push({ id: req.body.productId, quantity: 1 });
+    }
     res.send('Product added to cart');
+});
+
+router.get('/cart', async (req, res) => {
+    if (!req.session.cartId) {
+        return res.redirect('/');
+    }
+    const cart = await cartsRepo.getOne(req.session.cartId);
+    for (let item of cart.items) {
+        const product = await productsRepo.getOne(item.id);
+        item.product = product;
+    }
+    res.send(cartShowTemplate({ items: cart.items }));
 });
 
 
